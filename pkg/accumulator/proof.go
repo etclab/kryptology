@@ -489,6 +489,19 @@ func (mp *MembershipProof) UnmarshalBinary(data []byte) error {
 	return nil
 }
 
+type membershipProofFinalMarshal struct {
+	Accumulator    []byte `bare:"accumulator"`
+	EC             []byte `bare:"e_c"`
+	TSigma         []byte `bare:"t_sigma"`
+	TRho           []byte `bare:"t_rho"`
+	CapRE          []byte `bare:"cap_r_e"`
+	CapRSigma      []byte `bare:"cap_r_sigma"`
+	CapRRho        []byte `bare:"cap_r_rho"`
+	CapRDeltaSigma []byte `bare:"cap_r_delta_sigma"`
+	CapRDeltaRho   []byte `bare:"cap_r_delta_rho"`
+	Curve          string `bare:"curve"`
+}
+
 // MembershipProofFinal contains values that are input to Fiat-Shamir Heuristic
 type MembershipProofFinal struct {
 	accumulator    curves.Point
@@ -515,4 +528,89 @@ func (m MembershipProofFinal) GetChallenge(curve *curves.PairingCurve) curves.Sc
 	res = append(res, m.capRDeltaRho.ToAffineCompressed()...)
 	challenge := curve.Scalar.Hash(res)
 	return challenge
+}
+
+// MarshalBinary converts MembershipProofFinal to bytes
+func (m *MembershipProofFinal) MarshalBinary() ([]byte, error) {
+	if m.accumulator == nil || m.eC == nil || m.tSigma == nil || m.tRho == nil ||
+		m.capRE == nil || m.capRSigma == nil || m.capRRho == nil ||
+		m.capRDeltaSigma == nil || m.capRDeltaRho == nil {
+		return nil, fmt.Errorf("some value is nil")
+	}
+	tv := &membershipProofFinalMarshal{
+		Accumulator:    m.accumulator.ToAffineCompressed(),
+		EC:             m.eC.ToAffineCompressed(),
+		TSigma:         m.tSigma.ToAffineCompressed(),
+		TRho:           m.tRho.ToAffineCompressed(),
+		CapRE:          m.capRE.Bytes(),
+		CapRSigma:      m.capRSigma.ToAffineCompressed(),
+		CapRRho:        m.capRRho.ToAffineCompressed(),
+		CapRDeltaSigma: m.capRDeltaSigma.ToAffineCompressed(),
+		CapRDeltaRho:   m.capRDeltaRho.ToAffineCompressed(),
+		Curve:          m.eC.CurveName(),
+	}
+	return bare.Marshal(tv)
+}
+
+// UnmarshalBinary converts bytes to MembershipProofFinal
+func (m *MembershipProofFinal) UnmarshalBinary(data []byte) error {
+	if data == nil {
+		return fmt.Errorf("expected non-zero byte sequence")
+	}
+	tv := new(membershipProofFinalMarshal)
+	err := bare.Unmarshal(data, tv)
+	if err != nil {
+		return err
+	}
+	curve := curves.GetCurveByName(tv.Curve)
+	if curve == nil {
+		return fmt.Errorf("invalid curve")
+	}
+	accumulator, err := curve.NewIdentityPoint().FromAffineCompressed(tv.Accumulator)
+	if err != nil {
+		return err
+	}
+	eC, err := curve.NewIdentityPoint().FromAffineCompressed(tv.EC)
+	if err != nil {
+		return err
+	}
+	tSigma, err := curve.NewIdentityPoint().FromAffineCompressed(tv.TSigma)
+	if err != nil {
+		return err
+	}
+	tRho, err := curve.NewIdentityPoint().FromAffineCompressed(tv.TRho)
+	if err != nil {
+		return err
+	}
+	capRE, err := curve.NewScalar().SetBytes(tv.CapRE)
+	if err != nil {
+		return err
+	}
+	capRSigma, err := curve.NewIdentityPoint().FromAffineCompressed(tv.CapRSigma)
+	if err != nil {
+		return err
+	}
+	capRRho, err := curve.NewIdentityPoint().FromAffineCompressed(tv.CapRRho)
+	if err != nil {
+		return err
+	}
+	capRDeltaSigma, err := curve.NewIdentityPoint().FromAffineCompressed(tv.CapRDeltaSigma)
+	if err != nil {
+		return err
+	}
+	capRDeltaRho, err := curve.NewIdentityPoint().FromAffineCompressed(tv.CapRDeltaRho)
+	if err != nil {
+		return err
+	}
+
+	m.accumulator = accumulator
+	m.eC = eC
+	m.tSigma = tSigma
+	m.tRho = tRho
+	m.capRE = capRE
+	m.capRSigma = capRSigma
+	m.capRRho = capRRho
+	m.capRDeltaSigma = capRDeltaSigma
+	m.capRDeltaRho = capRDeltaRho
+	return nil
 }

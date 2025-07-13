@@ -7,6 +7,8 @@
 package accumulator
 
 import (
+	"bytes"
+	"crypto/rand"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -179,4 +181,102 @@ func testFinalProof(t *testing.T, finalProof *MembershipProofFinal) {
 	require.NotNil(t, finalProof.capRRho)
 	require.NotNil(t, finalProof.capRDeltaSigma)
 	require.NotNil(t, finalProof.capRDeltaRho)
+}
+
+func TestMembershipProofFinalMarshalUnmarshal(t *testing.T) {
+	curve := curves.BLS12381(&curves.PointBls12381G1{})
+	proof := &MembershipProofFinal{
+		accumulator:    curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		eC:             curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		tSigma:         curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		tRho:           curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		capRE:          curve.Scalar.Random(rand.Reader),
+		capRSigma:      curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		capRRho:        curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		capRDeltaSigma: curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		capRDeltaRho:   curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+	}
+
+	data, err := proof.MarshalBinary()
+	if err != nil {
+		t.Fatalf("MarshalBinary failed: %v", err)
+	}
+
+	var result MembershipProofFinal
+	err = result.UnmarshalBinary(data)
+	if err != nil {
+		t.Fatalf("UnmarshalBinary failed: %v", err)
+	}
+
+	if !proof.accumulator.Equal(result.accumulator) ||
+		!proof.eC.Equal(result.eC) ||
+		!proof.tSigma.Equal(result.tSigma) ||
+		!proof.tRho.Equal(result.tRho) ||
+		!bytes.Equal(proof.capRE.Bytes(), result.capRE.Bytes()) ||
+		!proof.capRSigma.Equal(result.capRSigma) ||
+		!proof.capRRho.Equal(result.capRRho) ||
+		!proof.capRDeltaSigma.Equal(result.capRDeltaSigma) ||
+		!proof.capRDeltaRho.Equal(result.capRDeltaRho) {
+		t.Errorf("Unmarshaled MembershipProofFinal does not match original")
+	}
+}
+
+func TestMembershipProofFinalUnmarshalInvalidData(t *testing.T) {
+	var proof MembershipProofFinal
+	err := proof.UnmarshalBinary(nil)
+	if err == nil || err.Error() != "expected non-zero byte sequence" {
+		t.Errorf("Expected error for nil data, got: %v", err)
+	}
+
+	// Test with invalid data that will cause bare unmarshal to fail
+	err = proof.UnmarshalBinary([]byte{0x00})
+	if err == nil {
+		t.Errorf("Expected error for invalid data, got nil")
+	}
+}
+
+func TestMembershipProofFinalMarshalNilFields(t *testing.T) {
+	proof := &MembershipProofFinal{}
+	data, err := proof.MarshalBinary()
+	if err == nil || err.Error() != "some value is nil" {
+		t.Errorf("Expected error for nil fields, got: %v", err)
+	}
+	if data != nil {
+		t.Errorf("Expected nil data for nil fields, got: %v", data)
+	}
+}
+
+func TestMembershipProofFinalMarshalUnmarshalConsistency(t *testing.T) {
+	curve := curves.BLS12381(&curves.PointBls12381G1{})
+	proof := &MembershipProofFinal{
+		accumulator:    curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		eC:             curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		tSigma:         curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		tRho:           curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		capRE:          curve.Scalar.Random(rand.Reader),
+		capRSigma:      curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		capRRho:        curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		capRDeltaSigma: curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+		capRDeltaRho:   curve.PointG1.Generator().Mul(curve.Scalar.Random(rand.Reader)),
+	}
+
+	data, err := proof.MarshalBinary()
+	if err != nil {
+		t.Fatalf("MarshalBinary failed: %v", err)
+	}
+
+	var result MembershipProofFinal
+	err = result.UnmarshalBinary(data)
+	if err != nil {
+		t.Fatalf("UnmarshalBinary failed: %v", err)
+	}
+
+	data2, err := result.MarshalBinary()
+	if err != nil {
+		t.Fatalf("Second MarshalBinary failed: %v", err)
+	}
+
+	if !bytes.Equal(data, data2) {
+		t.Errorf("Marshaled data not consistent after unmarshal and remarshal")
+	}
 }
