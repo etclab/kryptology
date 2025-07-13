@@ -13,10 +13,10 @@ import (
 
 	"filippo.io/edwards25519"
 
-	"github.com/coinbase/kryptology/internal"
-	"github.com/coinbase/kryptology/pkg/core/curves"
-	dkg "github.com/coinbase/kryptology/pkg/dkg/gennaro"
-	"github.com/coinbase/kryptology/pkg/sharing/v1"
+	"github.com/etclab/kryptology/internal"
+	"github.com/etclab/kryptology/pkg/core/curves"
+	dkg "github.com/etclab/kryptology/pkg/dkg/gennaro"
+	"github.com/etclab/kryptology/pkg/sharing/v1"
 )
 
 const LIMIT = 4

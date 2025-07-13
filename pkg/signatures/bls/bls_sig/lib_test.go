@@ -13,8 +13,8 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/coinbase/kryptology/internal"
-	"github.com/coinbase/kryptology/pkg/core/curves/native/bls12381"
+	"github.com/etclab/kryptology/internal"
+	"github.com/etclab/kryptology/pkg/core/curves/native/bls12381"
 )
 
 func genSecretKey(t *testing.T) *SecretKey {

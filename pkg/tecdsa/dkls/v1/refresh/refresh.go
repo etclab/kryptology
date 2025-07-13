@@ -19,11 +19,11 @@ import (
 	"github.com/gtank/merlin"
 	"github.com/pkg/errors"
 
-	"github.com/coinbase/kryptology/pkg/core/curves"
-	"github.com/coinbase/kryptology/pkg/ot/base/simplest"
-	"github.com/coinbase/kryptology/pkg/ot/extension/kos"
-	"github.com/coinbase/kryptology/pkg/tecdsa/dkls/v1/dkg"
-	"github.com/coinbase/kryptology/pkg/zkp/schnorr"
+	"github.com/etclab/kryptology/pkg/core/curves"
+	"github.com/etclab/kryptology/pkg/ot/base/simplest"
+	"github.com/etclab/kryptology/pkg/ot/extension/kos"
+	"github.com/etclab/kryptology/pkg/tecdsa/dkls/v1/dkg"
+	"github.com/etclab/kryptology/pkg/zkp/schnorr"
 )
 
 // Alice struct encoding Alice's state during one execution of the overall signing algorithm.

@@ -15,11 +15,11 @@ import (
 
 	"golang.org/x/crypto/hkdf"
 
-	"github.com/coinbase/kryptology/internal"
-	"github.com/coinbase/kryptology/pkg/core/curves"
-	"github.com/coinbase/kryptology/pkg/core/curves/native"
-	"github.com/coinbase/kryptology/pkg/core/curves/native/bls12381"
-	"github.com/coinbase/kryptology/pkg/sharing"
+	"github.com/etclab/kryptology/internal"
+	"github.com/etclab/kryptology/pkg/core/curves"
+	"github.com/etclab/kryptology/pkg/core/curves/native"
+	"github.com/etclab/kryptology/pkg/core/curves/native/bls12381"
+	"github.com/etclab/kryptology/pkg/sharing"
 )
 
 // Secret key in Fr

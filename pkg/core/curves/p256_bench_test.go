@@ -16,7 +16,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/coinbase/kryptology/pkg/core"
+	"github.com/etclab/kryptology/pkg/core"
 )
 
 func BenchmarkP256(b *testing.B) {

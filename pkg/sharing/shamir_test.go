@@ -14,7 +14,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/coinbase/kryptology/pkg/core/curves"
+	"github.com/etclab/kryptology/pkg/core/curves"
 )
 
 func TestShamirSplitInvalidArgs(t *testing.T) {

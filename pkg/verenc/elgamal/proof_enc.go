@@ -12,8 +12,8 @@ import (
 
 	"git.sr.ht/~sircmpwn/go-bare"
 
-	"github.com/coinbase/kryptology/internal"
-	"github.com/coinbase/kryptology/pkg/core/curves"
+	"github.com/etclab/kryptology/internal"
+	"github.com/etclab/kryptology/pkg/core/curves"
 )
 
 // ProofVerEnc is a proof of verifiable encryption for a discrete log

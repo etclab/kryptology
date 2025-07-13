@@ -10,11 +10,11 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/coinbase/kryptology/internal"
-	"github.com/coinbase/kryptology/pkg/core"
-	"github.com/coinbase/kryptology/pkg/paillier"
-	"github.com/coinbase/kryptology/pkg/sharing/v1"
-	"github.com/coinbase/kryptology/pkg/tecdsa/gg20/proof"
+	"github.com/etclab/kryptology/internal"
+	"github.com/etclab/kryptology/pkg/core"
+	"github.com/etclab/kryptology/pkg/paillier"
+	"github.com/etclab/kryptology/pkg/sharing/v1"
+	"github.com/etclab/kryptology/pkg/tecdsa/gg20/proof"
 )
 
 // DkgRound1Bcast contains values to be broadcast to all players after the completion of DKG round 1

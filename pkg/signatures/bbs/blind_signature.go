@@ -10,8 +10,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/coinbase/kryptology/pkg/core/curves"
-	"github.com/coinbase/kryptology/pkg/signatures/common"
+	"github.com/etclab/kryptology/pkg/core/curves"
+	"github.com/etclab/kryptology/pkg/signatures/common"
 )
 
 // BlindSignature is a BBS+ blind signature

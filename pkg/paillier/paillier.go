@@ -27,8 +27,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/coinbase/kryptology/internal"
-	"github.com/coinbase/kryptology/pkg/core"
+	"github.com/etclab/kryptology/internal"
+	"github.com/etclab/kryptology/pkg/core"
 )
 
 // PaillierPrimeBits is the number of bits used to generate Paillier Safe Primes.

@@ -1,4 +1,4 @@
-module github.com/coinbase/kryptology
+module github.com/etclab/kryptology
 
 go 1.17
 

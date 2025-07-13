@@ -6,9 +6,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/coinbase/kryptology/pkg/core/curves"
-	"github.com/coinbase/kryptology/pkg/core/protocol"
-	"github.com/coinbase/kryptology/pkg/tecdsa/dkls/v1/sign"
+	"github.com/etclab/kryptology/pkg/core/curves"
+	"github.com/etclab/kryptology/pkg/core/protocol"
+	"github.com/etclab/kryptology/pkg/tecdsa/dkls/v1/sign"
 )
 
 func newSignProtocolMessage(payload []byte, round string, version uint) *protocol.Message {
